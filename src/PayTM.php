@@ -13,8 +13,10 @@ class PayTM{
     public $paytmTxnUrl;   
     public $paytmRefundUrl;
 
-    public function __construct($config = [])
+    public function __construct($config)
     {
+		
+		
         $this->env = $config['environment'];
         if($this->env=='local'){
             $this->paytmStatusUrl='https://securegw-stage.paytm.in/merchant-status/getTxnStatus';
@@ -281,24 +283,24 @@ class PayTM{
 		$responseParamList = json_decode($jsonResponse,true);
 		return $responseParamList;
 	}
-    public static function pay($data)
+    public  function pay($data)
 	{
 
 		$ORDER_ID=$data['order_id'];
 		$CUST_ID=$data['user_id'];
 		$TXN_AMOUNT=$data['amount'];
 		$CALLBACK_URL=$data['call_back_url'];
-		$paramList["MID"] =  (new self)->mid;
+		$paramList["MID"] =  $this->mid;
 		$paramList["ORDER_ID"] = $ORDER_ID;
 		$paramList["CUST_ID"] = $CUST_ID;
-		$paramList["INDUSTRY_TYPE_ID"] = (new self)->indType;
-		$paramList["CHANNEL_ID"] = (new self)->chanel;
+		$paramList["INDUSTRY_TYPE_ID"] =  $this->indType;
+		$paramList["CHANNEL_ID"] =  $this->chanel;
 		$paramList["TXN_AMOUNT"] = $TXN_AMOUNT;
-		$paramList["WEBSITE"] = (new self)->website;
+		$paramList["WEBSITE"] = $this->website;
 		$paramList["CALLBACK_URL"] = $CALLBACK_URL;
 
 
-		$checkSum = (new self)->getChecksumFromArray($paramList,(new self)->mkey);
+		$checkSum =  $this->getChecksumFromArray($paramList, $this->mkey);
 		?>
 		<html>
 		<head>
@@ -306,7 +308,7 @@ class PayTM{
 		</head>
 		<body>
 			<center><h1>Please do not refresh this page...</h1></center>
-				<form method="post" action="<?php echo (new self)->paytmTxnUrl ?>" name="f1">
+				<form method="post" action="<?php echo  $this->paytmTxnUrl ?>" name="f1">
 				<table border="1">
 					<tbody>
 					<?php
@@ -325,7 +327,7 @@ class PayTM{
 		</html>
 		<?php
 	}
-    public static function recived($data)
+    public  function recived($data)
 	{
 		$paytmChecksum = "";
 		$paramList = array();
@@ -335,7 +337,7 @@ class PayTM{
 		$paytmChecksum = isset($data["CHECKSUMHASH"]) ? $data["CHECKSUMHASH"] : ""; //Sent by Paytm pg
 
 		//Verify all parameters received from Paytm pg to your application. Like MID received from paytm pg is same as your application�s MID, TXN_AMOUNT and ORDER_ID are same as what was sent by you to Paytm PG for initiating transaction etc.
-		$isValidChecksum = (new self)->verifychecksum_e($paramList, (new self)->mkey, $paytmChecksum); //will return TRUE or FALSE string.
+		$isValidChecksum =  $this->verifychecksum_e($paramList,  $this->mkey, $paytmChecksum); //will return TRUE or FALSE string.
 		unset($data['CHECKSUMHASH']);
 		$res = [];
 		if($isValidChecksum == "TRUE") {
