@@ -8,9 +8,7 @@
         }
     ],
     "autoload": {
-        "psr-4": {
-            "PayTM":"src/"
-        }
+        "psr-4":{"rajib\\PayTM\\": "src/"}
     },
     "require": {}
 }
