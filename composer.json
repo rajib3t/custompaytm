@@ -1,6 +1,7 @@
 {
     "name": "rajib/custompaytm",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Rajib Mondal",
