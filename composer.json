@@ -1,0 +1,16 @@
+{
+    "name": "rajib/custompaytm",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Rajib Mondal",
+            "email": "rajib.3t@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PayTM":"src"
+        }
+    },
+    "require": {}
+}
